@@ -5,6 +5,9 @@ from langchain.agents import create_agent
 from langchain.tools import tool
 from langchain_core.messages import HumanMessage
 from langchain_ollama import ChatOllama
+from tavily import TavilyClient
+
+tavily = TavilyClient()
 
 @tool
 def search(query: str) -> str:
@@ -17,7 +20,7 @@ def search(query: str) -> str:
         The search results
     """
     print(f"Searching for {query}")
-    return "Tokyo weather is sunny"
+    return tavily.search(query = query)
 
 
 llm = ChatOllama(model = "gpt-oss:20b", temperature = 0)
@@ -25,7 +28,7 @@ tools = [search]
 agent = create_agent(model = llm, tools = tools)
 def main():
     print("Hello from langchain-course!")
-    result = agent.invoke({"messages": HumanMessage(content="What is the weather in Tokyo?")})
+    result = agent.invoke({"messages": HumanMessage(content = "Search for 3 job postings for an ai engineer using langchain in Montreal on linkedin and list their details")})
     print(result)
 
 
